@@ -1,1 +1,7 @@
 @AGENTS.md
+
+# Table & form components
+
+- **Tables**: use the components in `src/components/table/` (barrel: `src/components/table/index.ts`) — `DataTable` (server-driven sorting, pagination, loading/error/empty states, row selection, serial numbers, row click), plus `TableHeader` (search), `TableAction`/`TableIconAction` (dropdown menus), `TableColumnFilter` (column visibility), `NoContentFound`, `IsFetching`. Don't hand-roll a table with the raw `@/components/ui/table` primitives or reach for MUI — those primitives are what `DataTable` is built on, not a public API for features to use directly. For a trivial, fully client-side table (no server pagination/loading), the lighter `src/components/data-table/data-table.tsx` is fine instead.
+- **Forms**: use the components in `src/components/rhf/` (barrel: `src/components/rhf/index.ts`) — `RhfFormProvider`, `RhfTextField`, `RhfSelect`, `SearchableSelect`/`SearchableSelectMultiple`/`SearchableSelectAsync`/`SearchableSelectAsyncMultiple`, `RhfCheckbox`/`RhfMultiCheckbox`, `RhfRadioGroup`/`RhfRadioButton`, `RhfSwitch`, `RhfTelInput`, `RhfDatePicker`/`RhfTimePicker`/`RhfDateTimePicker`/`RhfDateRangePicker`. Each already wires `FormField`/`FormItem`/`FormLabel`/`FormControl`/`FormMessage` (from `@/components/ui/form`) via `useFormContext()` — don't rebuild that boilerplate per field for anything these already cover.
+- Both directories are the shadcn/Tailwind + Base UI (`@base-ui/react`) ports of the MUI reference components in `temp/` — `temp/` itself is reference-only, never import from it.
