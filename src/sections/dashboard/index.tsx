@@ -2,8 +2,11 @@
 
 import * as React from "react"
 import { AnimatePresence, motion } from "motion/react"
+import { MenuIcon } from "lucide-react"
 
+import { Button } from "@/components/ui/button"
 import { AnimatedWaveBackground } from "@/sections/animated-wave-background"
+import { BrandLogo } from "@/sections/brand-logo"
 import { ChatHistoryPanel } from "@/sections/dashboard/chat-history-panel"
 import { ChatPanel } from "@/sections/dashboard/chat-panel"
 import { DASHBOARD_NAV_ITEMS } from "@/sections/dashboard/nav-config"
@@ -19,17 +22,33 @@ import { DashboardSidebar } from "@/sections/dashboard/sidebar"
  */
 export function DashboardSection() {
   const [activeKey, setActiveKey] = React.useState("neuro-ai")
+  const [sidebarOpen, setSidebarOpen] = React.useState(false)
   const activeNavItem = DASHBOARD_NAV_ITEMS.find((item) => item.key === activeKey)
 
   return (
-    <div className="neuro relative flex min-h-screen gap-4 overflow-hidden p-4 lg:p-6">
+    <div className="neuro relative flex min-h-screen flex-col gap-4 overflow-x-clip p-3 sm:p-4 lg:flex-row lg:p-6">
       <div className="neuro-wave-container">
         <AnimatedWaveBackground />
       </div>
 
+      {/* Mobile-only top bar — the static sidebar column takes over at `lg`. */}
+      <header className="relative z-10 flex items-center justify-between lg:hidden">
+        <BrandLogo className="text-base" />
+        <Button
+          variant="outline"
+          size="icon"
+          aria-label="Open navigation"
+          onClick={() => setSidebarOpen(true)}
+        >
+          <MenuIcon className="size-4" />
+        </Button>
+      </header>
+
       <DashboardSidebar
         activeKey={activeKey}
         onSelect={setActiveKey}
+        open={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
         className="relative z-10"
       />
 
@@ -45,7 +64,7 @@ export function DashboardSection() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -8 }}
           transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-          className="relative z-10 flex min-w-0 flex-1 gap-4"
+          className="relative z-10 flex min-w-0 flex-1 flex-col gap-4 lg:flex-row"
         >
           {activeKey === "neuro-ai" && (
             <>

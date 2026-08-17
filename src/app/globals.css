@@ -182,8 +182,18 @@
    * them read as a very faint, almost-invisible tint against this mode's
    * near-white `--background`. These stay legible at low opacity instead.
    */
-  --neuro-wave-from: oklch(0.5 0.21 264);
-  --neuro-wave-to: oklch(0.58 0.18 224);
+  /*
+   * Lighter, less-saturated than the dark-mode pair below, and painted at a
+   * lower `--neuro-wave-opacity` (see `AnimatedWaveBackground`) — the
+   * darker/more-saturated colors read fine as thin gradient strokes on a
+   * near-black background, but the same values at the same alpha over
+   * light mode's near-white background painted as a heavy, muddy color
+   * wash rather than an ambient accent. This pair stays soft/pastel so the
+   * waves read as a subtle tint instead of competing with foreground content.
+   */
+  --neuro-wave-from: oklch(0.86 0.07 264);
+  --neuro-wave-to: oklch(0.88 0.06 222);
+  --neuro-wave-opacity: 0.45;
   background: var(--background);
   color: var(--foreground);
   transition:
@@ -224,6 +234,7 @@
   /* Dark mode's near-black background already has plenty of contrast against the brand colors, so the wave reuses them as-is. */
   --neuro-wave-from: var(--neuro-brand-from);
   --neuro-wave-to: var(--neuro-brand-to);
+  --neuro-wave-opacity: 1;
 }
 
 .neuro-surface {

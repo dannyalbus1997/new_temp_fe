@@ -43,7 +43,12 @@ const rowVariants: Variants = {
  */
 export function ChatHistoryPanel({ className }: ChatHistoryPanelProps) {
   return (
-    <div className={cn("neuro-surface flex w-72 shrink-0 flex-col rounded-xl p-4", className)}>
+    <div
+      className={cn(
+        "neuro-surface flex max-h-64 w-full shrink-0 flex-col rounded-xl p-4 lg:max-h-none lg:w-72",
+        className
+      )}
+    >
       <p className="mb-3 text-sm font-semibold">NeuroBank AI</p>
 
       <div className="mb-4 flex gap-2">

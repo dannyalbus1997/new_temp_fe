@@ -67,6 +67,11 @@ export function AnimatedWaveBackground({ className }: AnimatedWaveBackgroundProp
     let height = 0
     let colorFrom = "oklch(0.6 0.19 264)"
     let colorTo = "oklch(0.75 0.14 220)"
+    // Per-theme multiplier on top of each layer's own `opacity` (see
+    // `--neuro-wave-opacity` in globals.css) — light mode dials the whole
+    // effect down so it reads as an ambient tint instead of a heavy wash
+    // against the near-white background.
+    let opacityScale = 1
 
     function resize() {
       const dpr = Math.min(window.devicePixelRatio || 1, 2)
@@ -81,6 +86,8 @@ export function AnimatedWaveBackground({ className }: AnimatedWaveBackgroundProp
       const styles = getComputedStyle(canvas)
       colorFrom = styles.getPropertyValue("--neuro-wave-from").trim() || colorFrom
       colorTo = styles.getPropertyValue("--neuro-wave-to").trim() || colorTo
+      const scale = Number.parseFloat(styles.getPropertyValue("--neuro-wave-opacity"))
+      opacityScale = Number.isFinite(scale) ? scale : 1
     }
     resize()
 
@@ -111,7 +118,7 @@ export function AnimatedWaveBackground({ className }: AnimatedWaveBackgroundProp
       gradient.addColorStop(0.55, end)
       gradient.addColorStop(1, "transparent")
 
-      ctx2d.globalAlpha = layer.opacity
+      ctx2d.globalAlpha = layer.opacity * opacityScale
       ctx2d.fillStyle = gradient
       ctx2d.fill()
     }
