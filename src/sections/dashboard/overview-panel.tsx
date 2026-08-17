@@ -14,6 +14,7 @@ import {
   INCOME_COMPARISON_CURRENT_YEAR,
   INCOME_COMPARISON_LABELS,
   INCOME_COMPARISON_LAST_YEAR,
+  type DashboardStat,
   type DashboardTransaction,
 } from "@/sections/dashboard/data"
 
@@ -36,6 +37,24 @@ const sectionVariants: Variants = {
   show: { opacity: 1, y: 0 },
 }
 
+// Icon chip background per stat accent — kept out of `data.ts` since it's
+// pure presentation, not demo data. Soft tinted background + saturated
+// icon color, tuned to stay legible in both light and dark `.neuro`.
+const STAT_ACCENT_CLASSES: Record<DashboardStat["accent"], string> = {
+  sky: "bg-sky-500/10 text-sky-500 dark:text-sky-400",
+  emerald: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
+  amber: "bg-amber-500/10 text-amber-600 dark:text-amber-400",
+  violet: "bg-violet-500/10 text-violet-600 dark:text-violet-400",
+}
+
+// Soft tinted badges instead of the button-style `default`/`secondary`
+// variants — those two read as "featured" vs. "muted/inactive" rather than
+// "done" vs. "in progress", which misrepresents a routine Pending status.
+const STATUS_BADGE_CLASSES: Record<DashboardTransaction["status"], string> = {
+  Completed: "border-emerald-500/20 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
+  Pending: "border-amber-500/20 bg-amber-500/10 text-amber-600 dark:text-amber-400",
+}
+
 const transactionColumns: ColumnDef<DashboardTransaction>[] = [
   { accessorKey: "merchant", header: "Merchant" },
   { accessorKey: "category", header: "Category" },
@@ -46,7 +65,7 @@ const transactionColumns: ColumnDef<DashboardTransaction>[] = [
     cell: ({ row }) => {
       const amount = row.original.amount
       return (
-        <span className={amount.startsWith("-") ? "text-foreground" : "text-emerald-400"}>
+        <span className={amount.startsWith("-") ? "text-foreground" : "text-emerald-500 dark:text-emerald-400"}>
           {amount}
         </span>
       )
@@ -56,7 +75,7 @@ const transactionColumns: ColumnDef<DashboardTransaction>[] = [
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => (
-      <Badge variant={row.original.status === "Completed" ? "default" : "secondary"}>
+      <Badge variant="outline" className={STATUS_BADGE_CLASSES[row.original.status]}>
         {row.original.status}
       </Badge>
     ),
@@ -78,31 +97,42 @@ export function OverviewPanel({ className }: OverviewPanelProps) {
         variants={statGridVariants}
         className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4"
       >
-        {DASHBOARD_STATS.map((stat) => (
-          <motion.div
-            key={stat.label}
-            variants={statCardVariants}
-            whileHover={{ y: -4 }}
-            transition={{ type: "spring", stiffness: 300, damping: 25 }}
-            className="neuro-surface rounded-xl p-4"
-          >
-            <p className="text-xs text-muted-foreground">{stat.label}</p>
-            <p className="mt-1 text-xl font-semibold">{stat.value}</p>
-            <p
-              className={cn(
-                "mt-1 flex items-center gap-1 text-xs font-medium",
-                stat.trend === "up" ? "text-emerald-400" : "text-destructive"
-              )}
+        {DASHBOARD_STATS.map((stat) => {
+          const Icon = stat.icon
+          return (
+            <motion.div
+              key={stat.label}
+              variants={statCardVariants}
+              whileHover={{ y: -4 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              className="neuro-surface rounded-xl p-4"
             >
-              {stat.trend === "up" ? (
-                <ArrowUpIcon className="size-3" />
-              ) : (
-                <ArrowDownIcon className="size-3" />
-              )}
-              {stat.delta}
-            </p>
-          </motion.div>
-        ))}
+              <span
+                className={cn(
+                  "flex size-8 items-center justify-center rounded-lg",
+                  STAT_ACCENT_CLASSES[stat.accent]
+                )}
+              >
+                <Icon className="size-4" aria-hidden="true" />
+              </span>
+              <p className="mt-3 text-xs text-muted-foreground">{stat.label}</p>
+              <p className="mt-1 text-xl font-semibold">{stat.value}</p>
+              <p
+                className={cn(
+                  "mt-1 flex items-center gap-1 text-xs font-medium",
+                  stat.trend === "up" ? "text-emerald-500 dark:text-emerald-400" : "text-amber-600 dark:text-amber-400"
+                )}
+              >
+                {stat.trend === "up" ? (
+                  <ArrowUpIcon className="size-3" />
+                ) : (
+                  <ArrowDownIcon className="size-3" />
+                )}
+                {stat.delta}
+              </p>
+            </motion.div>
+          )
+        })}
       </motion.div>
 
       <motion.div
@@ -110,7 +140,7 @@ export function OverviewPanel({ className }: OverviewPanelProps) {
         animate="show"
         variants={sectionVariants}
         transition={{ delay: 0.25 }}
-        className="neuro-surface rounded-xl p-4"
+        className="neuro-surface-accent rounded-xl p-4"
       >
         <p className="mb-2 text-sm font-semibold">Income — current vs. last year</p>
         <ComparisonLineChart

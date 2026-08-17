@@ -2,7 +2,10 @@ import {
   AlertTriangleIcon,
   ArrowLeftRightIcon,
   PiggyBankIcon,
+  ReceiptIcon,
   TrendingUpIcon,
+  WalletIcon,
+  type LucideIcon,
 } from "lucide-react"
 
 import type {
@@ -91,13 +94,44 @@ export interface DashboardStat {
   value: string
   delta: string
   trend: "up" | "down"
+  icon: LucideIcon
+  /** Tailwind color name driving the icon chip's tint — see `overview-panel.tsx`. */
+  accent: "sky" | "emerald" | "amber" | "violet"
 }
 
 export const DASHBOARD_STATS: DashboardStat[] = [
-  { label: "Total Balance", value: "$48,290.00", delta: "+8.2%", trend: "up" },
-  { label: "Monthly Income", value: "$6,420.00", delta: "+12.0%", trend: "up" },
-  { label: "Monthly Expenses", value: "$3,180.00", delta: "-4.1%", trend: "down" },
-  { label: "Savings Rate", value: "34%", delta: "+2.5%", trend: "up" },
+  {
+    label: "Total Balance",
+    value: "$48,290.00",
+    delta: "+8.2%",
+    trend: "up",
+    icon: WalletIcon,
+    accent: "sky",
+  },
+  {
+    label: "Monthly Income",
+    value: "$6,420.00",
+    delta: "+12.0%",
+    trend: "up",
+    icon: TrendingUpIcon,
+    accent: "emerald",
+  },
+  {
+    label: "Monthly Expenses",
+    value: "$3,180.00",
+    delta: "-4.1%",
+    trend: "down",
+    icon: ReceiptIcon,
+    accent: "amber",
+  },
+  {
+    label: "Savings Rate",
+    value: "34%",
+    delta: "+2.5%",
+    trend: "up",
+    icon: PiggyBankIcon,
+    accent: "violet",
+  },
 ]
 
 /** Static demo notifications standing in for a real notifications feed. */

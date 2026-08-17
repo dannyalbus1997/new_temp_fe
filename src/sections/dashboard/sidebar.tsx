@@ -80,7 +80,7 @@ export function DashboardSidebar({
         </Button>
       </div>
 
-      <WelcomeCard name="George" className="neuro-surface rounded-xl p-4" />
+      <WelcomeCard name="George" className="neuro-surface rounded-xl p-5" />
 
       <motion.nav
         initial="hidden"
@@ -106,7 +106,7 @@ export function DashboardSidebar({
                 "relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
                 isActive
                   ? "text-sidebar-accent-foreground"
-                  : "text-muted-foreground hover:text-sidebar-accent-foreground"
+                  : "text-muted-foreground hover:bg-sidebar-accent/40 hover:text-sidebar-accent-foreground"
               )}
             >
               {isActive && (

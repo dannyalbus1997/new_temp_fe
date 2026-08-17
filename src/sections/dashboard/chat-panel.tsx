@@ -45,8 +45,12 @@ const assistantMessageVariants: Variants = {
 export function ChatPanel({ className }: ChatPanelProps) {
   return (
     <div className={cn("flex min-w-0 flex-1 flex-col gap-4", className)}>
-      <div className="neuro-surface rounded-xl p-4">
-        <MiniAreaChart data={YEAR_OVERVIEW_SERIES} labels={YEAR_OVERVIEW_LABELS} />
+      <div className="neuro-surface-accent rounded-xl p-4">
+        <MiniAreaChart
+          data={YEAR_OVERVIEW_SERIES}
+          labels={YEAR_OVERVIEW_LABELS}
+          title="Year Income"
+        />
       </div>
 
       <ScrollArea className="flex-1">
@@ -63,7 +67,7 @@ export function ChatPanel({ className }: ChatPanelProps) {
                 variants={userMessageVariants}
                 className="flex items-start justify-end gap-3"
               >
-                <p className="neuro-surface max-w-md rounded-xl rounded-tr-sm px-4 py-2.5 text-sm">
+                <p className="max-w-md rounded-xl rounded-tr-sm border border-primary/15 bg-primary/10 px-4 py-2.5 text-sm text-foreground">
                   {message.content}
                 </p>
                 <Avatar className="size-8 shrink-0">
